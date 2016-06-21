@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Teste das Funções da Amazon</string>
+    <string name="button_list">Atualizar Lista</string>
+    <string name="button_items">Items da Tabela</string>
+    <string name="button_add_item">Adicionar Dispositivo</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="address_db">Endereço de IP do Banco de Dados</string>
+</resources>
