@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 
 public class InsertItem extends AppCompatActivity {
 
@@ -66,6 +69,11 @@ public class InsertItem extends AppCompatActivity {
             return;
         }
 
+        Calendar calendar = Calendar.getInstance();
+
+        String idString = new SimpleDateFormat("yyyyMMddHHmmss").format(calendar.getTime()).toString();
+
+        userPreference.setIdDevice(Long.parseLong(idString));
         userPreference.setNameDevice(nome);
         userPreference.setUserName(user);
         userPreference.setSituation(situation);

@@ -20,6 +20,8 @@ import android.util.Log;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 /**
@@ -50,9 +52,15 @@ public class AmazonClientManager {
     }
 
     private void initClients() {
+        /****credentials***/
         BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAIFAXGBW3HDEGKF2Q", "AIaVirpRfFkwAyuqN38OviapQTGAZnVOPtB1Pg6G");
         ddb = new AmazonDynamoDBClient(credentials);
-        ddb.setEndpoint("http://192.168.0.19:8000");
+
+        // Amazon Database
+        ddb.setRegion(Region.getRegion(Regions.US_EAST_1));
+
+        // Local Database
+        //ddb.setEndpoint("http://192.168.0.19:8000");
     }
 
     public boolean wipeCredentialsOnAuthError(AmazonServiceException ex) {

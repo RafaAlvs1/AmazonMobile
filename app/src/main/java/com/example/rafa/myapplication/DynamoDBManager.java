@@ -39,57 +39,6 @@ public class DynamoDBManager {
     private static final String TAG = "DynamoDBManager";
 
     /*
-     * Retrieves the table description and returns the table status as a string.
-     */
-    public static String getTestTableStatus() {
-
-        try {
-            AmazonDynamoDBClient ddb = MainActivity.clientManager
-                    .ddb();
-
-            DescribeTableRequest request = new DescribeTableRequest()
-                    .withTableName("Devices");
-            DescribeTableResult result = ddb.describeTable(request);
-
-            String status = result.getTable().getTableStatus();
-            return status == null ? "" : status;
-
-        } catch (ResourceNotFoundException e) {
-        } catch (AmazonServiceException ex) {
-            MainActivity.clientManager
-                    .wipeCredentialsOnAuthError(ex);
-        }
-
-        return "";
-    }
-
-    /*
-    * Creates a table with the following attributes: Table name: testTableName
-    * Hash key: userNo type N Read Capacity Units: 10 Write Capacity Units: 5
-    */
-    public static void listTables() {
-
-        Log.d(TAG, "List tables called");
-
-        AmazonDynamoDBClient ddb = MainActivity.clientManager
-                .ddb();
-        try {
-            List<String> tables = ddb.listTables().getTableNames();
-
-            System.out.println("Listing table names");
-            for(String elem : tables){
-                System.out.println(elem);
-            }
-
-        } catch (AmazonServiceException ex) {
-            Log.e(TAG, "Error sending create table request", ex);
-            MainActivity.clientManager
-                    .wipeCredentialsOnAuthError(ex);
-        }
-
-    }
-
-    /*
      * Scans the table and returns the list of users.
      */
     public static List<String> getTablesList() {
@@ -174,12 +123,22 @@ public class DynamoDBManager {
 
     @DynamoDBTable(tableName = "Devices")
     public static class UserPreference {
+        private long Id;
         private String Name;
         private String User;
         private String Situation;
         private String Version;
 
-        @DynamoDBHashKey(attributeName = "NameDevice")
+        @DynamoDBHashKey(attributeName = "Id")
+        public long getIdDevice() {
+            return Id;
+        }
+
+        public void setIdDevice(long Id) {
+            this.Id = Id;
+        }
+
+        @DynamoDBRangeKey(attributeName = "NameDevice")
         public String getNameDevice() {
             return Name;
         }
@@ -188,7 +147,7 @@ public class DynamoDBManager {
             this.Name = Name;
         }
 
-        @DynamoDBRangeKey(attributeName = "UserName")
+        @DynamoDBAttribute(attributeName = "UserName")
         public String getUserName() {
             return User;
         }
@@ -213,6 +172,58 @@ public class DynamoDBManager {
 
         public void setVersionHardware(String Version) {
             this.Version = Version;
+        }
+
+    }
+
+
+    /*
+    * Retrieves the table description and returns the table status as a string.
+    *
+    public static String getTestTableStatus() {
+
+        try {
+            AmazonDynamoDBClient ddb = MainActivity.clientManager
+                    .ddb();
+
+            DescribeTableRequest request = new DescribeTableRequest()
+                    .withTableName("Devices");
+            DescribeTableResult result = ddb.describeTable(request);
+
+            String status = result.getTable().getTableStatus();
+            return status == null ? "" : status;
+
+        } catch (ResourceNotFoundException e) {
+        } catch (AmazonServiceException ex) {
+            MainActivity.clientManager
+                    .wipeCredentialsOnAuthError(ex);
+        }
+
+        return "";
+    }
+
+    /*
+    * Creates a table with the following attributes: Table name: testTableName
+    * Hash key: userNo type N Read Capacity Units: 10 Write Capacity Units: 5
+    *
+    public static void listTables() {
+
+        Log.d(TAG, "List tables called");
+
+        AmazonDynamoDBClient ddb = MainActivity.clientManager
+                .ddb();
+        try {
+            List<String> tables = ddb.listTables().getTableNames();
+
+            System.out.println("Listing table names");
+            for(String elem : tables){
+                System.out.println(elem);
+            }
+
+        } catch (AmazonServiceException ex) {
+            Log.e(TAG, "Error sending create table request", ex);
+            MainActivity.clientManager
+                    .wipeCredentialsOnAuthError(ex);
         }
 
     }
